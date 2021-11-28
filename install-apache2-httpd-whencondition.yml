@@ -1,0 +1,46 @@
+---
+- name: This playbook is to install httpd and start httpd services and apach2 based on when cond
+  hosts: all
+  become: true
+  # gather_facts: no
+  tasks:
+  - name: install package
+    yum:
+      name: httpd
+      state: installed
+    when: ansible_os_family == "RedHat"
+    tags: installation
+
+  - name: start httpd service
+    service:
+      name: httpd
+      enabled: yes
+      state: restarted
+    when: ansible_os_family == "RedHat"
+    tags: starting_app
+
+  - name: install apache2
+    apt:
+      name: apache2
+      state: present
+    when: ansible_os_family == "Debian"
+    tags: installation
+
+  - name: start apache2
+    service:
+      name: apache2
+      state: restarted
+    when: ansible_os_family == "Debian"
+    tags: starting_app
+
+  - name: copy index.html
+    copy:
+      src: /opt/ansible/index.html
+      dest: /var/www/html
+      mode: 0666
+    when: ansible_os_family == "RedHat"
+
+
+
+
+

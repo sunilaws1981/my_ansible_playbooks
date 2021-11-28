@@ -1,0 +1,15 @@
+---
+- name: this playbook is to stop Apache2 and remove it from Ubuntu 
+  hosts: dbservers
+  become: true
+  tasks:
+  - name: stop apache2 service
+    service:
+      name: apache2
+      state: stopped
+  - name: uninstall apache2
+    apt:
+      name: apache2
+      state: absent
+
+
